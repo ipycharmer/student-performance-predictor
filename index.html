@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Student Exam Score Predictor — End-to-end ML pipeline predicting exam scores and minimum study hours to pass. Built by Ameer Hamza Nasir."/>
+<title>Student Score Predictor · ipycharmer</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%234fc3f7'/><text x='50' y='68' font-size='55' font-family='Syne,sans-serif' font-weight='800' text-anchor='middle' fill='%23080c10'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#080c10;--bg2:#0e1318;--bg3:#141a21;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--accent:#4fc3f7;--accent2:#43e8a0;--accent3:#ff8a65;--text:#e8edf2;--muted:#6b7a8d;--muted2:#8fa0b3;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--display:'Syne',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.7;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,black 40%,transparent 100%)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(8,12,16,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--mono);font-size:14px;color:var(--accent);text-decoration:none}
+.nav-back{font-family:var(--mono);font-size:12px;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .2s}
+.nav-back:hover{color:var(--text)}
+section{position:relative;z-index:1}
+.hero{max-width:900px;margin:0 auto;padding:130px 48px 80px;text-align:center}
+.back-link{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:2px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;margin-bottom:32px;transition:color .2s}
+.back-link:hover{color:var(--accent)}
+.project-type{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:10px}
+.project-type::before,.project-type::after{content:'';width:32px;height:1px;background:var(--accent)}
+.hero h1{font-family:var(--display);font-size:clamp(36px,7vw,72px);font-weight:800;line-height:1;letter-spacing:-2.5px;margin-bottom:20px}
+.hero h1 span{color:var(--accent)}
+.hero-desc{color:var(--muted2);font-size:17px;max-width:600px;margin:0 auto 40px;font-weight:300;line-height:1.6}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:56px}
+.btn-primary{font-family:var(--mono);font-size:13px;background:var(--accent);color:#080c10;padding:13px 30px;border-radius:4px;text-decoration:none;font-weight:500;letter-spacing:.5px;transition:opacity .2s,transform .15s;display:inline-block}
+.btn-primary:hover{opacity:.88;transform:translateY(-2px)}
+.btn-outline{font-family:var(--mono);font-size:13px;color:var(--text);border:1px solid var(--border2);padding:13px 30px;border-radius:4px;text-decoration:none;letter-spacing:.5px;transition:border-color .2s,color .2s,transform .15s;display:inline-block}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.hero-stats{display:flex;justify-content:center;gap:48px;padding-top:40px;border-top:1px solid var(--border)}
+.stat-num{font-family:var(--display);font-size:30px;font-weight:700;color:var(--accent);line-height:1;margin-bottom:4px}
+.stat-lbl{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.ticker-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);padding:12px 0;position:relative;z-index:1}
+.ticker{display:flex;white-space:nowrap;animation:ticker 22s linear infinite}
+.ticker-item{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;padding:0 28px;display:flex;align-items:center;gap:10px}
+.ticker-item::after{content:'·';color:var(--accent);font-size:16px}
+.wrap{max-width:900px;margin:0 auto;padding:100px 48px}
+.section-label{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:12px}
+.wrap h2{font-family:var(--display);font-size:clamp(26px,4vw,38px);font-weight:700;letter-spacing:-1px;margin-bottom:36px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:border-color .25s,transform .25s}
+.card:hover{border-color:var(--border2);transform:translateY(-3px)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.code-block{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:20px 24px;font-family:var(--mono);font-size:12.5px;line-height:2;color:var(--muted2);margin-top:24px;position:relative;overflow:hidden}
+.code-block::before{content:'● ● ●';font-size:8px;letter-spacing:4px;color:var(--muted);display:block;margin-bottom:14px}
+.line-a{color:var(--accent)}.line-g{color:var(--accent2)}.line-o{color:var(--accent3)}
+.pipeline-flow{display:flex;flex-direction:column;gap:0;margin-top:24px}
+.pipe-step{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 20px;font-family:var(--mono);font-size:12px;color:var(--muted2);display:flex;align-items:center;gap:12px;transition:border-color .2s}
+.pipe-step:hover{border-color:var(--accent)}
+.pipe-step .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.pipe-step .dot.green{background:var(--accent2)}
+.pipe-step .dot.orange{background:var(--accent3)}
+.pipe-arrow{text-align:center;color:var(--muted);font-size:18px;padding:4px 0}
+.metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+.metric-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center}
+.metric-val{font-family:var(--display);font-size:26px;font-weight:700;color:var(--accent);line-height:1;margin-bottom:4px}
+.metric-val.green{color:var(--accent2)}
+.metric-lbl{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.fi-row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.fi-name{width:160px;font-family:var(--mono);font-size:11px;color:var(--muted2);flex-shrink:0}
+.fi-bg{flex:1;height:6px;background:var(--bg3);border-radius:4px}
+.fi-fill{height:100%;border-radius:4px;background:var(--accent)}
+.fi-pct{width:40px;text-align:right;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.5px;color:var(--muted2);background:var(--bg3);border:1px solid var(--border);padding:3px 9px;border-radius:3px;display:inline-block;margin:3px}
+.tag.a{color:var(--accent);border-color:rgba(79,195,247,.25);background:rgba(79,195,247,.06)}
+.tag.g{color:var(--accent2);border-color:rgba(67,232,160,.25);background:rgba(67,232,160,.06)}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+.reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}
+footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.footer-copy,.footer-built{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.footer-built span{color:var(--accent)}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(max-width:640px){nav{padding:0 20px}.hero{padding:100px 24px 60px}.hero-stats{gap:24px;flex-wrap:wrap}.wrap{padding:70px 24px}.metrics-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://ipycharmer.github.io" class="nav-logo">ipycharmer</a>
+  <a href="https://ipycharmer.github.io" class="nav-back">← Back to portfolio</a>
+</nav>
+
+<!-- HERO -->
+<section>
+  <div class="hero">
+    <p class="project-type">Machine Learning · Data Science</p>
+    <h1>Student Exam<br/><span>Score Predictor</span></h1>
+    <p class="hero-desc">
+      End-to-end ML pipeline trained on 6,607 real student records.
+      Predicts your exam score and tells you the minimum weekly study hours you need to pass.
+    </p>
+    <div class="hero-actions">
+      <a href="YOUR_STREAMLIT_URL_HERE" class="btn-primary" target="_blank">🚀 Try the Live App</a>
+      <a href="https://github.com/ipycharmer/student-performance-predictor" class="btn-outline" target="_blank">View on GitHub</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">6,607</div><div class="stat-lbl">student records</div></div>
+      <div><div class="stat-num">0.68</div><div class="stat-lbl">R² score</div></div>
+      <div><div class="stat-num">2.03</div><div class="stat-lbl">MAE (pts)</div></div>
+      <div><div class="stat-num">19</div><div class="stat-lbl">features</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">Python</span><span class="ticker-item">Scikit-learn</span>
+    <span class="ticker-item">Random Forest</span><span class="ticker-item">Pipeline</span>
+    <span class="ticker-item">ColumnTransformer</span><span class="ticker-item">OrdinalEncoder</span>
+    <span class="ticker-item">MinMaxScaler</span><span class="ticker-item">Streamlit</span>
+    <span class="ticker-item">Pandas</span><span class="ticker-item">Joblib</span>
+    <span class="ticker-item">EDA</span><span class="ticker-item">Feature Engineering</span>
+    <span class="ticker-item">Python</span><span class="ticker-item">Scikit-learn</span>
+    <span class="ticker-item">Random Forest</span><span class="ticker-item">Pipeline</span>
+    <span class="ticker-item">ColumnTransformer</span><span class="ticker-item">OrdinalEncoder</span>
+    <span class="ticker-item">MinMaxScaler</span><span class="ticker-item">Streamlit</span>
+    <span class="ticker-item">Pandas</span><span class="ticker-item">Joblib</span>
+    <span class="ticker-item">EDA</span><span class="ticker-item">Feature Engineering</span>
+  </div>
+</div>
+
+<!-- PIPELINE -->
+<section>
+  <div class="wrap">
+    <div class="reveal">
+      <p class="section-label">// architecture</p>
+      <h2>Pipeline Design</h2>
+    </div>
+    <div class="card reveal reveal-d1">
+      <p style="color:var(--muted2);font-size:14px;line-height:1.7">
+        Instead of manually looping encoders (which causes <em>unseen data</em> errors at prediction time),
+        the entire preprocessing + model is wrapped in a single <strong style="color:var(--accent)">sklearn Pipeline</strong>.
+        One <code style="background:var(--bg3);padding:2px 7px;border-radius:3px;font-family:var(--mono);font-size:12px">pipeline.joblib</code>
+        file handles everything — encoding, scaling, prediction — with no manual steps in the app.
+      </p>
+      <div class="pipeline-flow">
+        <div class="pipe-step"><span class="dot"></span> Raw DataFrame (strings + numbers)</div>
+        <div class="pipe-arrow">↓</div>
+        <div class="pipe-step"><span class="dot"></span> ColumnTransformer</div>
+        <div class="pipe-arrow">↓</div>
+        <div class="pipe-step" style="margin-left:24px"><span class="dot green"></span> OrdinalEncoder → 8 ordinal cols (Low/Med/High → 0/1/2)</div>
+        <div class="pipe-step" style="margin-left:24px"><span class="dot green"></span> OrdinalEncoder → 5 binary cols (Yes/No → 0/1)</div>
+        <div class="pipe-step" style="margin-left:24px"><span class="dot green"></span> MinMaxScaler → 6 numeric cols (→ 0 to 1 range)</div>
+        <div class="pipe-arrow">↓</div>
+        <div class="pipe-step"><span class="dot orange"></span> RandomForestRegressor (200 trees, random_state=42)</div>
+        <div class="pipe-arrow">↓</div>
+        <div class="pipe-step"><span class="dot orange"></span> Predicted Exam Score (55–101)</div>
+      </div>
+      <div class="code-block">
+        <span class="line-a">pipeline = Pipeline(steps=[</span>
+        <span>    ("preprocessor", ColumnTransformer([</span>
+        <span>        ("ordinal", OrdinalEncoder(categories=ordinal_cats), ORDINAL_COLS),</span>
+        <span>        ("binary",  OrdinalEncoder(categories=binary_cats),  BINARY_COLS),</span>
+        <span>        ("numeric", MinMaxScaler(),                          NUM_COLS),</span>
+        <span>    ])),</span>
+        <span class="line-a">    ("model", RandomForestRegressor(n_estimators=200, random_state=42))</span>
+        <span class="line-a">])</span>
+        <span> </span>
+        <span class="line-g">pipeline.fit(X_train, y_train)</span>
+        <span class="line-g">joblib.dump(pipeline, "pipeline.joblib")  # one file, everything inside</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="section-label">// model performance</p>
+      <h2>Results</h2>
+    </div>
+    <div class="metrics-grid reveal reveal-d1">
+      <div class="metric-card">
+        <div class="metric-val">0.68</div>
+        <div class="metric-lbl">R² Score</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val green">2.03</div>
+        <div class="metric-lbl">MAE (pts)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">200</div>
+        <div class="metric-lbl">Trees</div>
+      </div>
+    </div>
+
+    <div style="margin-top:36px" class="reveal reveal-d2">
+      <p class="section-label" style="margin-bottom:16px">// feature importance</p>
+      <div class="fi-row"><div class="fi-name">Attendance</div><div class="fi-bg"><div class="fi-fill" style="width:100%"></div></div><div class="fi-pct">38.5%</div></div>
+      <div class="fi-row"><div class="fi-name">Hours_Studied</div><div class="fi-bg"><div class="fi-fill" style="width:64%"></div></div><div class="fi-pct">24.7%</div></div>
+      <div class="fi-row"><div class="fi-name">Previous_Scores</div><div class="fi-bg"><div class="fi-fill" style="width:23%"></div></div><div class="fi-pct">8.8%</div></div>
+      <div class="fi-row"><div class="fi-name">Tutoring_Sessions</div><div class="fi-bg"><div class="fi-fill" style="width:9.3%"></div></div><div class="fi-pct">3.6%</div></div>
+      <div class="fi-row"><div class="fi-name">Access_to_Resources</div><div class="fi-bg"><div class="fi-fill" style="width:7.8%"></div></div><div class="fi-pct">3.0%</div></div>
+      <div class="fi-row"><div class="fi-name">Parental_Involvement</div><div class="fi-bg"><div class="fi-fill" style="width:7.5%"></div></div><div class="fi-pct">2.9%</div></div>
+      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:12px">
+        Key insight: Attendance (38.5%) matters more than hours studied (24.7%).
+        Most students grind study hours while skipping class — the data says that's the wrong trade-off.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section>
+  <div class="wrap">
+    <div class="reveal">
+      <p class="section-label">// tech stack</p>
+      <h2>Built With</h2>
+    </div>
+    <div class="card reveal reveal-d1" style="margin-bottom:16px">
+      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:14px">CORE</p>
+      <span class="tag a">Python 3.11</span>
+      <span class="tag a">Scikit-learn</span>
+      <span class="tag a">Pandas</span>
+      <span class="tag a">NumPy</span>
+      <span class="tag a">Joblib</span>
+      <span class="tag a">Streamlit</span>
+    </div>
+    <div class="card reveal reveal-d2" style="margin-bottom:16px">
+      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:14px">PREPROCESSING</p>
+      <span class="tag g">Pipeline</span>
+      <span class="tag g">ColumnTransformer</span>
+      <span class="tag g">OrdinalEncoder</span>
+      <span class="tag g">MinMaxScaler</span>
+    </div>
+    <div class="card reveal reveal-d3">
+      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:14px">VISUALIZATION & DEPLOYMENT</p>
+      <span class="tag">Matplotlib</span>
+      <span class="tag">Seaborn</span>
+      <span class="tag">Jupyter Notebook</span>
+      <span class="tag">Streamlit Cloud</span>
+      <span class="tag">GitHub Pages</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--bg2);border-top:1px solid var(--border)">
+  <div class="wrap" style="text-align:center">
+    <div class="reveal">
+      <p class="section-label" style="justify-content:center;display:flex">// try it</p>
+      <h2 style="margin-bottom:16px">See It in Action</h2>
+      <p style="color:var(--muted2);font-size:15px;max-width:480px;margin:0 auto 32px;font-weight:300">
+        Enter your study habits and personal details — get your predicted score and the exact
+        number of study hours you need to pass.
+      </p>
+      <a href="YOUR_STREAMLIT_URL_HERE" class="btn-primary" target="_blank" style="font-size:15px;padding:16px 40px">
+        🚀 Launch the App
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">Student Score Predictor · Ameer Hamza Nasir</span>
+  <a href="https://ipycharmer.github.io" class="footer-built" style="text-decoration:none">
+    ← <span>ipycharmer.github.io</span>
+  </a>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }});
+}, { threshold: 0.1 });
+reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
