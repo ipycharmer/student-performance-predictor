@@ -1,6 +1,6 @@
 # 🎓 Student Exam Score Predictor
 
-> **Live App:** [YOUR_STREAMLIT_URL_HERE](YOUR_STREAMLIT_URL_HERE)  
+> **Live App:** [Student-Performance-Predictor](https://ipycharmer-student-performance-predictor.streamlit.app/)
 > **Project Page:** [ipycharmer.github.io/student-performance-predictor](https://ipycharmer.github.io/student-performance-predictor)  
 > **Dataset:** [Student Performance Factors — Kaggle](https://www.kaggle.com/datasets/lainguyn123/student-performance-factors)
 
@@ -12,7 +12,7 @@ Predict a student's exam score based on 19 real-world factors and calculate the 
 
 Click the sliders, fill in your details, get your predicted score instantly.
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](YOUR_STREAMLIT_URL_HERE)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ipycharmer-student-performance-predictor.streamlit.app/)
 
 ---
 
@@ -120,7 +120,7 @@ The last cell saves a fresh `pipeline.joblib` automatically.
 ## 📬 Contact
 
 **Ameer Hamza Nasir**  
-`hamza6700@gmail.com` · [ipycharmer.github.io](https://ipycharmer.github.io) · [github.com/ipycharmer](https://github.com/ipycharmer)
+[Email](mailto:hamza6700@gmail.com) · [Portfolio](https://ipycharmer.github.io) · [Github](https://github.com/ipycharmer)
 
 ---
 
